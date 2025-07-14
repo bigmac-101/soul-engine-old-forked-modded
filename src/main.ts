@@ -352,34 +352,28 @@ function setupSoul() {
   const ws = new WebSocket("ws://localhost:4000");
 
   ws.onopen = () => {
-    addLogEntry("🧠 Framework: WebSocket connected to soul server", "log");
+    addLogEntry("Connected to Professor Code's Local Soul Engine", "log");
     updateProcessingStatus("Connected");
-    console.log("🧠 Framework: WebSocket connected to soul server");
+    console.log("✅ Connected to local soul server");
   };
 
   ws.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data);
-      console.log("📨 Framework received message:", data);
+      console.log("📨 Received from soul:", data);
 
       switch (data.type) {
         case "connection":
-          addLogEntry(`🧠 Framework: ${data.data.message}`, "log");
+          addLogEntry(`Soul Engine: ${data.data.message}`, "log");
           break;
 
         case "internal_monologue":
-          addLogEntry(
-            `💭 Framework returned thought: ${data.data.thought}`,
-            "thought"
-          );
+          addLogEntry(`🧠 Thinking: ${data.data.thought}`, "thought");
           addFloatingText(data.data.thought, "thought", 6000);
           break;
 
         case "response":
-          addLogEntry(
-            `💬 Framework returned response: ${data.data.message}`,
-            "response"
-          );
+          addLogEntry(`🎓 Professor Code: ${data.data.message}`, "response");
           addFloatingText(data.data.message, "response", 10000);
 
           if (isVoiceEnabled) {
@@ -388,25 +382,25 @@ function setupSoul() {
           break;
 
         case "error":
-          addLogEntry(`❌ Framework error: ${data.data.message}`, "error");
+          addLogEntry(`❌ Error: ${data.data.message}`, "error");
           break;
       }
     } catch (error) {
-      console.error("❌ Framework parsing error:", error);
-      addLogEntry(`❌ Framework parsing error: ${error.message}`, "error");
+      console.error("Error parsing WebSocket message:", error);
+      addLogEntry(`Parse error: ${error.message}`, "error");
     }
   };
 
   ws.onclose = () => {
-    addLogEntry("🔌 Framework: WebSocket disconnected", "error");
+    addLogEntry("Disconnected from soul engine", "error");
     updateProcessingStatus("Disconnected");
-    console.log("🔌 Framework: WebSocket disconnected");
+    console.log("🔌 Disconnected from local soul server");
   };
 
   ws.onerror = (error) => {
-    addLogEntry(`❌ Framework WebSocket error: ${error}`, "error");
+    addLogEntry(`WebSocket error: ${error}`, "error");
     updateProcessingStatus("Connection Error");
-    console.error("❌ Framework WebSocket error:", error);
+    console.error("❌ WebSocket error:", error);
   };
 
   // Store the WebSocket globally for sending messages
@@ -450,7 +444,7 @@ async function handleUserInput(input: string) {
   if (!input.trim()) return;
 
   updateProcessingStatus("Processing...");
-  addLogEntry(`📤 Framework: Sending user input to soul server`, "user");
+  addLogEntry(`User input: "${input}"`, "user");
   addFloatingText(`💬 ${input}`, "user", 6000);
 
   // Clear input
@@ -460,13 +454,13 @@ async function handleUserInput(input: string) {
     // Send to soul via WebSocket
     const ws = (globalThis as any).soulWebSocket;
     if (ws && ws.readyState === WebSocket.OPEN) {
-      const message = {
-        type: "chat",
-        content: input,
-        timestamp: new Date().toISOString(),
-      };
-      console.log("📤 Framework: Sending message to soul server:", message);
-      ws.send(JSON.stringify(message));
+      ws.send(
+        JSON.stringify({
+          type: "chat",
+          content: input,
+          timestamp: new Date().toISOString(),
+        })
+      );
     } else {
       throw new Error("WebSocket not connected");
     }
@@ -474,9 +468,8 @@ async function handleUserInput(input: string) {
     // Update memory count (placeholder - could be enhanced with actual conversation tracking)
     updateMemoryCount(Date.now() % 100); // Simple placeholder
   } catch (error) {
-    console.error("❌ Framework: Error sending message:", error);
-    addLogEntry(`❌ Framework: Error sending message - ${error}`, "error");
-    addFloatingText("❌ Framework error", "error", 4000);
+    addLogEntry(`Error processing input: ${error}`, "error");
+    addFloatingText("❌ Processing error", "error", 4000);
   } finally {
     updateProcessingStatus("Ready");
   }
@@ -507,10 +500,10 @@ async function init() {
       );
     });
 
-    addLogEntry("🧠 Framework: Font loaded for 3D text rendering", "log");
+    addLogEntry("Font loaded successfully", "log");
   } catch (error) {
-    addLogEntry(`❌ Framework: Font loading error - ${error}`, "error");
-    console.error("❌ Framework: Font loading error:", error);
+    addLogEntry(`Font loading error: ${error}`, "error");
+    console.error("Font loading error:", error);
   }
 
   // Create soul visualization
@@ -550,9 +543,9 @@ async function init() {
   // Start animation loop
   animate();
 
-  // Initial framework status
-  addLogEntry("🧠 Framework: 3D Soul Visualization initialized", "log");
-  addFloatingText("🌟 Framework ready!", "response", 5000);
+  // Initial messages
+  addLogEntry("🚀 Professor Code's soul is awakening...", "log");
+  addFloatingText("🌟 Professor Code is here!", "response", 5000);
 
   // Initial greeting after a short delay
   setTimeout(() => {

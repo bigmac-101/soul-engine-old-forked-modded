@@ -148,14 +148,14 @@ const professorCode = new ProfessorCodeSoul();
 
 // WebSocket connection handling
 wss.on("connection", (ws, req) => {
-  console.log("🧠 Framework: New WebSocket connection established");
+  console.log("🔗 New WebSocket connection established");
 
   // Send initial connection message
   ws.send(
     JSON.stringify({
       type: "connection",
       data: {
-        message: "Framework: Connected to Professor Code's Local Soul Server!",
+        message: "Connected to Professor Code's Local Soul Engine!",
         personality: professorCode.personality,
         timestamp: new Date().toISOString(),
       },
@@ -166,17 +166,12 @@ wss.on("connection", (ws, req) => {
   ws.on("message", (data) => {
     try {
       const message = JSON.parse(data);
-      console.log("📨 Framework: Received message:", message);
+      console.log("📨 Received message:", message);
 
       if (message.type === "chat") {
-        console.log("🧠 Framework: Processing user message through soul");
         // Process the message through the soul
         const result = professorCode.processMessage(message.content);
 
-        console.log(
-          "💭 Framework: Sending internal monologue:",
-          result.internalMonologue
-        );
         // Send internal monologue first
         ws.send(
           JSON.stringify({
@@ -190,7 +185,6 @@ wss.on("connection", (ws, req) => {
 
         // Then send the response
         setTimeout(() => {
-          console.log("💬 Framework: Sending response:", result.response);
           ws.send(
             JSON.stringify({
               type: "response",
@@ -204,7 +198,6 @@ wss.on("connection", (ws, req) => {
       }
 
       if (message.type === "get_state") {
-        console.log("📊 Framework: Sending soul state");
         ws.send(
           JSON.stringify({
             type: "state",
@@ -213,22 +206,22 @@ wss.on("connection", (ws, req) => {
         );
       }
     } catch (error) {
-      console.error("❌ Framework: Error processing message:", error);
+      console.error("❌ Error processing message:", error);
       ws.send(
         JSON.stringify({
           type: "error",
-          data: { message: "Framework: Error processing message" },
+          data: { message: "Error processing message" },
         })
       );
     }
   });
 
   ws.on("close", () => {
-    console.log("🔌 Framework: WebSocket connection closed");
+    console.log("🔌 WebSocket connection closed");
   });
 
   ws.on("error", (error) => {
-    console.error("❌ Framework: WebSocket error:", error);
+    console.error("❌ WebSocket error:", error);
   });
 });
 
@@ -252,19 +245,17 @@ app.get("/history", (req, res) => {
 // Start the server
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
-  console.log(`🧠 Framework: Professor Code's Local Soul Server starting...`);
-  console.log(
-    `🌐 Framework: WebSocket server running on ws://localhost:${PORT}`
-  );
-  console.log(`📡 Framework: HTTP server running on http://localhost:${PORT}`);
-  console.log(`🎓 Framework: Professor Code is ready to teach!`);
+  console.log(`🚀 Professor Code's Local Soul Engine starting...`);
+  console.log(`🌐 WebSocket server running on ws://localhost:${PORT}`);
+  console.log(`📡 HTTP server running on http://localhost:${PORT}`);
+  console.log(`🎓 Professor Code is ready to teach!`);
 });
 
 // Handle graceful shutdown
 process.on("SIGINT", () => {
-  console.log("\n🛑 Framework: Shutting down Professor Code's Soul Server...");
+  console.log("\n🛑 Shutting down Professor Code's Soul Engine...");
   wss.close(() => {
-    console.log("✅ Framework: Soul Server stopped gracefully");
+    console.log("✅ Soul Engine stopped gracefully");
     process.exit(0);
   });
 });
