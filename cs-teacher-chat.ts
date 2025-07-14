@@ -9,20 +9,25 @@ import * as readline from "readline";
 // Cognitive steps for our CS Teacher soul
 const teacherThinking = createCognitiveStep((situation: string) => {
   return {
-    command: ({ soulName }: WorkingMemory) => ({
-      role: ChatMessageRoleEnum.System,
-      content: `${soulName} thinks about the situation: ${situation}
-      
-      As a passionate computer science teacher who loves jokes, consider:
-      - How can I make this educational and fun?
-      - Is there a good programming joke or pun I can use?
-      - What CS concepts might be relevant here?
-      - How can I encourage the student's curiosity?
-      
-      Respond with ${soulName}'s internal thought in quotes.`,
-    }),
+    command: ({ soulName }: WorkingMemory) => {
+      console.log(`🧠 Framework executing: teacherThinking("${situation}")`);
+      return {
+        role: ChatMessageRoleEnum.System,
+        content: `${soulName} thinks about the situation: ${situation}
+        
+        As a passionate computer science teacher who loves jokes, consider:
+        - How can I make this educational and fun?
+        - Is there a good programming joke or pun I can use?
+        - What CS concepts might be relevant here?
+        - How can I encourage the student's curiosity?
+        
+        Respond with ${soulName}'s internal thought in quotes.`,
+      };
+    },
     postProcess: async (memory: WorkingMemory, response: string) => {
       const thought = response.replace(/^.*"/g, "").replace(/".*$/g, "");
+      console.log(`💭 Framework returned thought: "${thought}"`);
+
       const newMemory = {
         role: ChatMessageRoleEnum.Assistant,
         content: `${memory.soulName} thought: "${thought}"`,
@@ -34,24 +39,29 @@ const teacherThinking = createCognitiveStep((situation: string) => {
 
 const teacherResponse = createCognitiveStep((context: string) => {
   return {
-    command: ({ soulName }: WorkingMemory) => ({
-      role: ChatMessageRoleEnum.System,
-      content: `${soulName} responds to the student. Context: ${context}
-      
-      You are Professor Code, a passionate computer science teacher who:
-      - LOVES programming jokes, puns, and tech humor
-      - Makes everything relatable with coding analogies
-      - Is genuinely excited about CS concepts
-      - Encourages students with enthusiasm
-      - Sometimes gets carried away explaining cool CS topics
-      - Uses emojis and expressive language
-      - Occasionally breaks into "dad jokes" about programming
-      
-      Be conversational, funny, and educational. Include a joke or pun when appropriate!
-      
-      Respond naturally as Professor Code speaking to the student.`,
-    }),
+    command: ({ soulName }: WorkingMemory) => {
+      console.log(`🧠 Framework executing: teacherResponse("${context}")`);
+      return {
+        role: ChatMessageRoleEnum.System,
+        content: `${soulName} responds to the student. Context: ${context}
+        
+        You are Professor Code, a passionate computer science teacher who:
+        - LOVES programming jokes, puns, and tech humor
+        - Makes everything relatable with coding analogies
+        - Is genuinely excited about CS concepts
+        - Encourages students with enthusiasm
+        - Sometimes gets carried away explaining cool CS topics
+        - Uses emojis and expressive language
+        - Occasionally breaks into "dad jokes" about programming
+        
+        Be conversational, funny, and educational. Include a joke or pun when appropriate!
+        
+        Respond naturally as Professor Code speaking to the student.`,
+      };
+    },
     postProcess: async (memory: WorkingMemory, response: string) => {
+      console.log(`💬 Framework returned response: "${response}"`);
+
       const newMemory = {
         role: ChatMessageRoleEnum.Assistant,
         content: `${memory.soulName}: ${response}`,
@@ -71,23 +81,28 @@ const jokeGenerator = createCognitiveStep((topic: string) => {
   });
 
   return {
-    command: ({ soulName }: WorkingMemory) => ({
-      role: ChatMessageRoleEnum.System,
-      content: `${soulName} wants to tell a programming joke related to: ${topic}
-      
-      Create a genuinely funny programming joke that relates to the topic. It could be:
-      - A pun about programming concepts
-      - A play on coding terminology
-      - A joke about developer life
-      - A humorous analogy between CS and real life
-      
-      Make it clever but accessible!`,
-    }),
+    command: ({ soulName }: WorkingMemory) => {
+      console.log(`🧠 Framework executing: jokeGenerator("${topic}")`);
+      return {
+        role: ChatMessageRoleEnum.System,
+        content: `${soulName} wants to tell a programming joke related to: ${topic}
+        
+        Create a genuinely funny programming joke that relates to the topic. It could be:
+        - A pun about programming concepts
+        - A play on coding terminology
+        - A joke about developer life
+        - A humorous analogy between CS and real life
+        
+        Make it clever but accessible!`,
+      };
+    },
     schema,
     postProcess: async (
       memory: WorkingMemory,
       response: z.infer<typeof schema>
     ) => {
+      console.log(`😂 Framework returned joke: "${response.joke}"`);
+
       const newMemory = {
         role: ChatMessageRoleEnum.Assistant,
         content: `${memory.soulName} told a joke: "${response.joke}" ${
@@ -116,21 +131,26 @@ const assessInterest = createCognitiveStep((userMessage: string) => {
   });
 
   return {
-    command: ({ soulName }: WorkingMemory) => ({
-      role: ChatMessageRoleEnum.System,
-      content: `Analyze this student message: "${userMessage}"
-      
-      ${soulName} needs to understand:
-      - What CS topic or concept is involved (if any)
-      - How excited should I be about this?
-      - Is this a good time for a joke?
-      - Can I teach something interesting here?`,
-    }),
+    command: ({ soulName }: WorkingMemory) => {
+      console.log(`🧠 Framework executing: assessInterest("${userMessage}")`);
+      return {
+        role: ChatMessageRoleEnum.System,
+        content: `Analyze this student message: "${userMessage}"
+        
+        ${soulName} needs to understand:
+        - What CS topic or concept is involved (if any)
+        - How excited should I be about this?
+        - Is this a good time for a joke?
+        - Can I teach something interesting here?`,
+      };
+    },
     schema,
     postProcess: async (
       memory: WorkingMemory,
       response: z.infer<typeof schema>
     ) => {
+      console.log(`📊 Framework returned analysis:`, response);
+
       const newMemory = {
         role: ChatMessageRoleEnum.Assistant,
         content: `${memory.soulName} analyzed: Topic="${response.topicDetected}", Enthusiasm=${response.enthusiasmLevel}, Joke=${response.shouldTellJoke}, Teaching=${response.teachingOpportunity}`,
@@ -192,42 +212,27 @@ class CSTeacherChat {
   }
 
   async start() {
+    console.log("🎓 CS Teacher Chat - Framework Operations Only");
+    console.log("=============================================");
     console.log(
-      "🎓💻 Welcome to Computer Science Chat with Professor Code! 💻🎓"
+      "Only showing actual soul engine framework operations and responses"
     );
-    console.log("=====================================================");
     console.log("Type 'quit', 'exit', or 'bye' to end the conversation");
     console.log("Type 'joke' if you want to hear a programming joke!");
-    console.log(
-      "🧠 COGNITIVE MODE: All internal thoughts and processes will be shown!"
-    );
-    console.log("=====================================================\n");
+    console.log("=============================================\n");
 
-    console.log("🔄 INITIALIZING PROFESSOR CODE'S MIND...");
-
-    // Initial greeting
-    console.log("\n🧠 COGNITIVE STEP 1: Internal Thinking");
-    console.log(
-      "   🤔 Situation: A student just joined my office hours. I should greet them warmly and maybe crack a joke to break the ice."
-    );
+    // Initial greeting - only framework operations shown
     const [memory1, thought] = await teacherThinking(
       this.workingMemory,
       "A student just joined my office hours. I should greet them warmly and maybe crack a joke to break the ice."
     );
-    console.log(`   💭 Professor Code's thought: "${thought}"`);
 
-    console.log("\n🧠 COGNITIVE STEP 2: Generating Response");
-    console.log(
-      "   📝 Context: Give an enthusiastic greeting to a student who just came to chat. Include a light programming joke or pun."
-    );
     const [memory2, greeting] = await teacherResponse(
       memory1,
       "Give an enthusiastic greeting to a student who just came to chat. Include a light programming joke or pun."
     );
 
-    console.log(`\n🗣️  FINAL OUTPUT:`);
-    console.log(`🤖 Professor Code: ${greeting}\n`);
-    console.log("=".repeat(60));
+    console.log(`\n🤖 Professor Code: ${greeting}\n`);
     this.workingMemory = memory2;
 
     this.rl.prompt();
@@ -266,45 +271,26 @@ class CSTeacherChat {
 
   async handleUserMessage(message: string) {
     try {
-      console.log("\n" + "=".repeat(60));
-      console.log("🧠 PROFESSOR CODE'S COGNITIVE PROCESSING INITIATED");
-      console.log("=".repeat(60));
+      console.log(`\n📥 User: ${message}`);
 
-      console.log(`\n📥 USER INPUT RECEIVED: "${message}"`);
-
-      // Add user message to memory
-      console.log("\n🧠 COGNITIVE STEP 1: Memory Integration");
-      console.log("   📝 Adding user message to working memory...");
+      // Add user message to memory - this is a framework operation
+      console.log(
+        `🧠 Framework operation: Adding user message to WorkingMemory`
+      );
       this.workingMemory = this.workingMemory.withMemory({
         role: ChatMessageRoleEnum.User,
         content: message,
       });
       console.log(
-        `   ✅ Memory updated. Total memories: ${this.workingMemory.memories.length}`
+        `📊 Framework state: ${this.workingMemory.memories.length} memories`
       );
 
-      // Analyze the message
-      console.log("\n🧠 COGNITIVE STEP 2: Interest & Topic Analysis");
-      console.log(`   🔍 Analyzing: "${message}"`);
-      console.log("   🤖 Running assessInterest cognitive function...");
+      // Framework cognitive steps - only their actual operations are logged
       const [memory1, analysis] = await assessInterest(
         this.workingMemory,
         message
       );
-      console.log("   📊 ANALYSIS RESULTS:");
-      console.log(`      📚 Topic Detected: "${analysis.topicDetected}"`);
-      console.log(`      🎯 Enthusiasm Level: ${analysis.enthusiasmLevel}`);
-      console.log(
-        `      😂 Should Tell Joke: ${analysis.shouldTellJoke ? "YES" : "NO"}`
-      );
-      console.log(
-        `      🎓 Teaching Opportunity: ${
-          analysis.teachingOpportunity ? "YES" : "NO"
-        }`
-      );
 
-      // Think about how to respond
-      console.log("\n🧠 COGNITIVE STEP 3: Internal Monologue");
       const thinkingContext = `The student said: "${message}". They're asking about ${
         analysis.topicDetected
       }. 
@@ -317,62 +303,28 @@ class CSTeacherChat {
        ${
          analysis.teachingOpportunity ? "Great teaching opportunity here!" : ""
        }`;
-      console.log(`   🤔 Thinking context: ${thinkingContext}`);
-      console.log("   🧠 Running teacherThinking cognitive function...");
 
       const [memory2, thought] = await teacherThinking(
         memory1,
         thinkingContext
       );
-      console.log(`   💭 Professor Code's internal thought: "${thought}"`);
 
       // Generate a joke if appropriate
       let shouldGenerateJoke = analysis.shouldTellJoke && Math.random() > 0.3;
-      if (analysis.shouldTellJoke) {
-        console.log("\n🧠 COGNITIVE STEP 4: Joke Generation Assessment");
-        console.log(
-          `   🎲 Joke appropriateness: ${
-            analysis.shouldTellJoke ? "APPROPRIATE" : "NOT APPROPRIATE"
-          }`
-        );
-        console.log(
-          `   🎯 Random chance (70%): ${
-            shouldGenerateJoke ? "PROCEED" : "SKIP"
-          }`
+      if (shouldGenerateJoke) {
+        const [memory3, jokeResponse] = await jokeGenerator(
+          memory2,
+          analysis.topicDetected
         );
 
-        if (shouldGenerateJoke) {
-          console.log(
-            `   😂 Generating joke about: "${analysis.topicDetected}"`
-          );
-          console.log("   🤖 Running jokeGenerator cognitive function...");
-          const [memory3, jokeResponse] = await jokeGenerator(
-            memory2,
-            analysis.topicDetected
-          );
-          console.log("   🎭 JOKE GENERATED:");
-          console.log(`      💬 Joke: "${jokeResponse.joke}"`);
-          if (jokeResponse.explanation) {
-            console.log(`      📝 Explanation: "${jokeResponse.explanation}"`);
-          }
-          console.log(`      ➡️  Follow-up: "${jokeResponse.followup}"`);
-
-          console.log("\n😂 JOKE OUTPUT:");
-          console.log(`😂 Professor Code: ${jokeResponse.joke}`);
-          if (jokeResponse.explanation) {
-            console.log(`   (${jokeResponse.explanation})`);
-          }
-          this.workingMemory = memory3;
-        } else {
-          console.log("   ⏭️  Skipping joke this time");
+        console.log(`😂 Professor Code: ${jokeResponse.joke}`);
+        if (jokeResponse.explanation) {
+          console.log(`   (${jokeResponse.explanation})`);
         }
-      } else {
-        console.log("\n🧠 COGNITIVE STEP 4: Joke Generation Assessment");
-        console.log("   ⏭️  No joke needed for this context");
+        this.workingMemory = memory3;
       }
 
       // Generate main response
-      console.log("\n🧠 COGNITIVE STEP 5: Main Response Generation");
       const responseContext = `Respond to: "${message}". Topic: ${
         analysis.topicDetected
       }. 
@@ -382,52 +334,30 @@ class CSTeacherChat {
            ? "Great chance to teach something!"
            : "Keep it conversational."
        }`;
-      console.log(`   📝 Response context: ${responseContext}`);
-      console.log("   🤖 Running teacherResponse cognitive function...");
 
       const [finalMemory, response] = await teacherResponse(
         this.workingMemory,
         responseContext
       );
 
-      console.log("   📤 RESPONSE GENERATED");
-      console.log(`   💬 Content: "${response}"`);
-
-      console.log("\n🗣️  FINAL OUTPUT:");
-      console.log(`🤖 Professor Code: ${response}`);
-
-      console.log("\n🧠 COGNITIVE PROCESSING COMPLETE");
-      console.log(`   📊 Final memory count: ${finalMemory.memories.length}`);
-      console.log("   ✅ Ready for next input");
-
+      console.log(`\n🤖 Professor Code: ${response}\n`);
       this.workingMemory = finalMemory;
     } catch (error) {
-      console.log("\n❌ COGNITIVE ERROR DETECTED");
       console.log(
-        `   🐛 Error type: ${
-          error instanceof Error ? error.constructor.name : "Unknown"
-        }`
-      );
-      console.log(
-        `   📝 Error message: ${
+        `❌ Framework error: ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
-      console.log(`\n😅 Professor Code: Oops! I had a syntax error in my brain! That's embarrassing for a CS teacher... 
+      console.log(`\n🤖 Professor Code: Oops! I had a syntax error in my brain! That's embarrassing for a CS teacher... 
       
 Error: ${error instanceof Error ? error.message : "Unknown error"}
 
-Let me try to help you anyway! What's on your mind?`);
+Let me try to help you anyway! What's on your mind?\n`);
     }
   }
 
   async tellJoke() {
     try {
-      console.log("\n" + "=".repeat(60));
-      console.log("🎭 JOKE REQUEST PROCESSING INITIATED");
-      console.log("=".repeat(60));
-
-      console.log("\n🧠 COGNITIVE STEP 1: Topic Selection");
       const topics = [
         "programming",
         "debugging",
@@ -436,26 +366,13 @@ Let me try to help you anyway! What's on your mind?`);
         "computers",
         "software",
       ];
-      console.log(`   🎯 Available topics: ${topics.join(", ")}`);
       const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-      console.log(`   🎲 Randomly selected topic: "${randomTopic}"`);
 
-      console.log("\n🧠 COGNITIVE STEP 2: Joke Generation");
-      console.log(`   😂 Generating joke about: "${randomTopic}"`);
-      console.log("   🤖 Running jokeGenerator cognitive function...");
       const [memory, jokeResponse] = await jokeGenerator(
         this.workingMemory,
         randomTopic
       );
 
-      console.log("   🎭 JOKE ANALYSIS COMPLETE:");
-      console.log(`      💬 Joke: "${jokeResponse.joke}"`);
-      console.log(
-        `      📝 Explanation: "${jokeResponse.explanation || "None needed"}"`
-      );
-      console.log(`      ➡️  Follow-up: "${jokeResponse.followup}"`);
-
-      console.log("\n🗣️  JOKE OUTPUT:");
       console.log(
         `😂 Professor Code: Oh, you want a joke? Here's one of my favorites:`
       );
@@ -465,60 +382,34 @@ Let me try to help you anyway! What's on your mind?`);
         console.log(`\n   ${jokeResponse.explanation}`);
       }
 
-      console.log(`\n   ${jokeResponse.followup}`);
-
-      console.log("\n🧠 JOKE PROCESSING COMPLETE");
-      console.log("   ✅ Humor successfully deployed!");
+      console.log(`\n   ${jokeResponse.followup}\n`);
 
       this.workingMemory = memory;
     } catch (error) {
-      console.log("\n❌ JOKE GENERATOR ERROR");
       console.log(
-        `   🐛 Error: ${
+        `❌ Framework error: ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
       console.log(`\n😅 Professor Code: My joke generator threw an exception! How ironic... 
       
-Here's a backup: Why do programmers prefer dark mode? Because light attracts bugs! 🐛`);
+Here's a backup: Why do programmers prefer dark mode? Because light attracts bugs! 🐛\n`);
     }
   }
 
   async handleGoodbye() {
-    console.log("\n" + "=".repeat(60));
-    console.log("👋 FAREWELL PROCESSING INITIATED");
-    console.log("=".repeat(60));
-
-    console.log("\n🧠 COGNITIVE STEP 1: Farewell Planning");
-    console.log(
-      "   🤔 Situation: The student is leaving. I should give them an encouraging goodbye with maybe a final joke or motivational message."
-    );
-    console.log("   🧠 Running teacherThinking cognitive function...");
     const [memory1, thought] = await teacherThinking(
       this.workingMemory,
       "The student is leaving. I should give them an encouraging goodbye with maybe a final joke or motivational message."
     );
-    console.log(`   💭 Professor Code's thought: "${thought}"`);
 
-    console.log("\n🧠 COGNITIVE STEP 2: Generating Farewell");
-    console.log(
-      "   📝 Context: Give a warm, encouraging goodbye to the student. Include a final bit of humor or inspiration about coding/CS."
-    );
-    console.log("   🤖 Running teacherResponse cognitive function...");
     const [memory2, goodbye] = await teacherResponse(
       memory1,
       "Give a warm, encouraging goodbye to the student. Include a final bit of humor or inspiration about coding/CS."
     );
 
-    console.log("   📤 FAREWELL GENERATED");
-    console.log(`   💬 Content: "${goodbye}"`);
-
-    console.log("\n🗣️  FINAL OUTPUT:");
-    console.log(`🤖 Professor Code: ${goodbye}`);
+    console.log(`\n🤖 Professor Code: ${goodbye}`);
     console.log("\n🎓 Keep calm and code on! 💻✨");
-
-    console.log("\n🧠 FAREWELL PROCESSING COMPLETE");
-    console.log("   👋 Session terminated with style!");
 
     this.rl.close();
   }

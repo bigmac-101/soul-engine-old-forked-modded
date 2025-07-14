@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Professor Code's Soul - 3D Visualization</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Courier New", monospace;
+        background: #000;
+        color: #fff;
+        overflow: hidden;
+        height: 100vh;
+      }
+
+      #canvas-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      #ui-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      #input-container {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        pointer-events: all;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 15px;
+        border: 2px solid #00ff88;
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        min-width: 400px;
+      }
+
+      #user-input {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        background: rgba(0, 255, 136, 0.1);
+        border: 1px solid #00ff88;
+        border-radius: 8px;
+        color: #fff;
+        font-family: "Courier New", monospace;
+        outline: none;
+      }
+
+      #user-input:focus {
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+      }
+
+      #status-panel {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #00ff88;
+        max-width: 300px;
+        pointer-events: all;
+      }
+
+      #cognitive-log {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #ff6b6b;
+        max-width: 400px;
+        max-height: 60vh;
+        overflow-y: auto;
+        pointer-events: all;
+        font-size: 12px;
+      }
+
+      .log-entry {
+        margin-bottom: 8px;
+        padding: 5px;
+        border-radius: 4px;
+      }
+
+      .log-thinking {
+        background: rgba(255, 107, 107, 0.2);
+      }
+      .log-assessment {
+        background: rgba(255, 193, 7, 0.2);
+      }
+      .log-joke {
+        background: rgba(156, 39, 176, 0.2);
+      }
+      .log-response {
+        background: rgba(76, 175, 80, 0.2);
+      }
+      .log-memory {
+        background: rgba(0, 188, 212, 0.2);
+      }
+
+      #voice-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #ff6b6b;
+        pointer-events: all;
+      }
+
+      .voice-button {
+        background: #ff6b6b;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: "Courier New", monospace;
+        margin: 5px;
+      }
+
+      .voice-button:hover {
+        background: #ff5252;
+      }
+
+      .voice-button:disabled {
+        background: #666;
+        cursor: not-allowed;
+      }
+
+      #instructions {
+        position: absolute;
+        bottom: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        font-size: 14px;
+        color: #aaa;
+        pointer-events: none;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.5;
+        }
+      }
+
+      .thinking {
+        animation: pulse 2s infinite;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container">
+      <!-- Three.js canvas will be inserted here -->
+    </div>
+
+    <div id="ui-overlay">
+      <div id="cognitive-log">
+        <h3>🧠 Cognitive Processes</h3>
+        <div id="log-content"></div>
+      </div>
+
+      <div id="status-panel">
+        <h3>📊 Soul Status</h3>
+        <div id="status-content">
+          <p>Memory Entries: <span id="memory-count">0</span></p>
+          <p>Processing: <span id="processing-status">Ready</span></p>
+          <p>Voice: <span id="voice-status">Inactive</span></p>
+        </div>
+      </div>
+
+      <div id="input-container">
+        <input
+          type="text"
+          id="user-input"
+          placeholder="Ask Professor Code about computer science... (or type 'joke' for a joke!)"
+        />
+      </div>
+
+      <div id="voice-controls">
+        <h4>🎙️ Voice Controls</h4>
+        <button class="voice-button" id="toggle-voice">Enable Voice</button>
+        <button class="voice-button" id="stop-voice">Stop Speaking</button>
+      </div>
+
+      <div id="instructions">
+        <p>
+          💬 Professor Code's thoughts appear as floating text in different
+          colors
+        </p>
+        <p>🎨 Watch the soul's energy visualize in real-time</p>
+        <p>🔊 Enable voice to hear Professor Code speak</p>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

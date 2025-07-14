@@ -1,0 +1,28 @@
+{
+  "name": "professor-code-soul",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "description": "Professor Code - A passionate CS teacher soul for OpenSouls",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "opensouls",
+    "professor",
+    "teacher",
+    "computer-science"
+  ],
+  "author": "",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "@opensouls/engine": "^0.1.46"
+  },
+  "soulEngine": {
+    "defaultModel": "gpt-4o-mini"
+  }
+}

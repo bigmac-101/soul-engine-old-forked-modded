@@ -1,0 +1,20 @@
+{
+  "name": "professor-code-local-soul",
+  "version": "1.0.0",
+  "description": "Standalone local soul server for Professor Code - no authentication required",
+  "main": "local-soul-server.js",
+  "scripts": {
+    "start": "node local-soul-server.js",
+    "dev": "node local-soul-server.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.2",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "author": "Local Soul Engine",
+  "license": "MIT"
+}

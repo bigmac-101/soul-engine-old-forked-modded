@@ -10,7 +10,11 @@
     "example": "tsx getting-started-example.ts",
     "example:dev": "tsx --watch getting-started-example.ts",
     "chat": "tsx cs-teacher-chat.ts",
-    "teacher": "tsx cs-teacher-chat.ts"
+    "teacher": "tsx cs-teacher-chat.ts",
+    "soul-3d": "vite serve --port 3000",
+    "soul-3d:dev": "vite --port 3000",
+    "start-local": "./start-local-soul.sh",
+    "test-local": "tsx test-local-soul.ts"
   },
   "workspaces": [
     "packages/*"
@@ -19,9 +23,14 @@
     "lerna": "^8.1.2",
     "tsx": "^4.7.1",
     "typescript": "^5.4.2",
-    "@types/node": "^20.11.0"
+    "@types/node": "^20.11.0",
+    "@types/three": "^0.160.0",
+    "vite": "^5.0.0"
   },
   "dependencies": {
-    "@opensouls/core": "^0.1.46"
+    "@opensouls/core": "^0.1.46",
+    "three": "^0.160.0",
+    "elevenlabs": "^0.8.1",
+    "zod": "^3.22.4"
   }
 }
