@@ -5,12 +5,20 @@
   "scripts": {
     "bump": "lerna version --no-private",
     "publish:all": "npm publish --workspace packages",
-    "build:all" : "npm run build --workspace packages/core && npm run build --workspace packages/soul && npm run build --workspace packages"
+    "build:all": "npm run build --workspace packages/core && npm run build --workspace packages/soul && npm run build --workspace packages",
+    "test-setup": "tsx test-setup.ts",
+    "example": "tsx getting-started-example.ts",
+    "example:dev": "tsx --watch getting-started-example.ts"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^8.1.2"
+    "lerna": "^8.1.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "@opensouls/core": "^0.1.46"
   }
 }
