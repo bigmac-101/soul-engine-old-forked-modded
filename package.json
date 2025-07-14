@@ -8,7 +8,9 @@
     "build:all": "npm run build --workspace packages/core && npm run build --workspace packages/soul && npm run build --workspace packages",
     "test-setup": "tsx test-setup.ts",
     "example": "tsx getting-started-example.ts",
-    "example:dev": "tsx --watch getting-started-example.ts"
+    "example:dev": "tsx --watch getting-started-example.ts",
+    "chat": "tsx cs-teacher-chat.ts",
+    "teacher": "tsx cs-teacher-chat.ts"
   },
   "workspaces": [
     "packages/*"
@@ -16,7 +18,8 @@
   "devDependencies": {
     "lerna": "^8.1.2",
     "tsx": "^4.7.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "@types/node": "^20.11.0"
   },
   "dependencies": {
     "@opensouls/core": "^0.1.46"
